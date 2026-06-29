@@ -1,0 +1,22 @@
+#!name=轻小说登录监测
+#!desc=自动登录轻小说网站并监测积分变化
+#!arguments=check_interval=6&notification=true
+
+[Script]
+# 登录脚本 - 用于获取登录cookie
+login = type=http-response,pattern=^https://www.linovelib.com/user.php,script-path=login.js,max-size=131072,debug=false
+
+# 积分监测脚本 - 用于检查积分变化
+check-points = type=cron,cronexp="*/%check_interval% * * * *",script-path=check-points.js,debug=false
+
+[Rule]
+# 重定向登录请求到我们的脚本
+DOMAIN,www.linovelib.com,PROTOCOL,HTTPS,DESTINATION,127.0.0.1:61616,PROXY,DIRECT
+
+# 允许轻小说网站的直接访问
+DOMAIN,linovelib.com,DIRECT
+DOMAIN,m.bilinovel.com,DIRECT
+
+[MITM]
+# 启用MITM以捕获登录cookie
+hostname = -*.linovelib.com, -*.bilinovel.com
