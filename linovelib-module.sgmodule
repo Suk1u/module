@@ -1,16 +1,16 @@
-#!name=定时任务
-#!desc=轻小说网站登录监测与积分检查
-#!arguments=hour=8&minute=0
+#!name=📚 轻小说 [签到]
+#!desc=每日定时签到，模块参数可调整签到时间。\n打开轻小说网站并登录即可获取cookie.
+#!arguments=定时签到:0 8 * * *,禁用脚本:轻小说[Cookie],禁用MITM:hostname
+#!arguments-desc=定时签到：Cron表达式，默认每天早上 08:00 执行。\n\n禁用脚本：禁用获取Cookie脚本，输入 # 表示禁用。\n\n禁用MITM：禁用MITM主机名，输入 # 表示禁用。
+#!category=📚 NovelLib
 
 [Script]
-# 登录脚本 - 用于获取登录cookie
-login = type=http-response,pattern=^https://www.linovelib.com/user.php,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/login.js,max-size=131072,debug=false
+轻小说[签到] = type=cron,cronexp="{{{定时签到}}}",wake-system=1,script-update-interval=0,timeout=600,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/check-points.js
 
-# 积分监测脚本 - 每天指定时间执行
-check-points = type=cron,cronexp="%minute% %hour% * * *",script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/check-points.js,debug=false
+{{{禁用脚本}}} = type=http-response,pattern=^https://www.linovelib.com/user.php,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/login.js
 
-# 手动执行脚本
-manual-check = type=http-request,pattern=^https://m.bilinovel.com/user.php,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/manual-check.js,max-size=131072,debug=false
+[MITM]
+{{{禁用MITM}}} = %APPEND% www.linovelib.com, m.bilinovel.com
 
 [Rule]
 # 重定向登录请求到我们的脚本
@@ -19,7 +19,3 @@ DOMAIN,www.linovelib.com,PROTOCOL,HTTPS,DESTINATION,127.0.0.1:61616,PROXY,DIRECT
 # 允许轻小说网站的直接访问
 DOMAIN,linovelib.com,DIRECT
 DOMAIN,m.bilinovel.com,DIRECT
-
-[MITM]
-# 启用MITM以捕获登录cookie
-hostname = -*.linovelib.com, -*.bilinovel.com
