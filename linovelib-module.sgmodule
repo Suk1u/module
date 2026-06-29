@@ -4,13 +4,13 @@
 
 [Script]
 # 登录脚本 - 用于获取登录cookie
-login = type=http-response,pattern=^https://www.linovelib.com/user.php,script-path=login.js,max-size=131072,debug=false
+login = type=http-response,pattern=^https://www.linovelib.com/user.php,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/login.js,max-size=131072,debug=false
 
 # 积分监测脚本 - 每天指定时间执行
-check-points = type=cron,cronexp="%minute% %hour% * * *",script-path=check-points.js,debug=false
+check-points = type=cron,cronexp="%minute% %hour% * * *",script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/check-points.js,debug=false
 
 # 手动执行脚本
-manual-check = type=http-request,pattern=^https://m.bilinovel.com/user.php,script-path=manual-check.js,max-size=131072,debug=false
+manual-check = type=http-request,pattern=^https://m.bilinovel.com/user.php,script-path=https://raw.githubusercontent.com/Suk1u/module/refs/heads/main/manual-check.js,max-size=131072,debug=false
 
 [Rule]
 # 重定向登录请求到我们的脚本
